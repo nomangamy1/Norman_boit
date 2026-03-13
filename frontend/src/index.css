@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  /* This replaces tailwind.config.js in v4 */
+  --color-pitch: #0a0a0a;
+  --color-turf: #15803d;
+  --color-gold: #fbbf24;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui;
+}
+
+/* Global resets for Norman & Boit */
+@layer base {
+  body {
+    @apply bg-pitch text-white antialiased;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Your Stadium Lighting Effect */
+.hero-gradient {
+  background: radial-gradient(circle at top center, var(--color-turf) / 0.2, var(--color-pitch) 100%);
+}
