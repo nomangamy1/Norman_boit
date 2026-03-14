@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { ShoppingCart, Menu, X, Search } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import CartSidebar from '../shop/CartSidebar';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const [isCartOpen, setIsCartOpen] = useState(false); // Sidebar state
   const { cart } = useCart();
+
+  // Close mobile menu when a link is clicked
+  const closeMenu = () => setIsOpen(false);
 
   return (
     <>
@@ -15,36 +19,36 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-20">
             
             {/* Brand Identity */}
-            <div className="flex-shrink-0 flex flex-col leading-tight cursor-pointer" onClick={() => window.location.href = '/'}>
+            <Link to="/" className="flex-shrink-0 flex flex-col leading-tight cursor-pointer">
               <span className="text-xl font-black tracking-tighter uppercase">
                 Norman & Boit
               </span>
               <span className="text-xs font-bold text-turf tracking-[0.3em] uppercase">
                 Pitchside
               </span>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 font-medium uppercase text-sm tracking-wide">
-              <a href="#" className="hover:text-turf transition">New Arrivals</a>
-              <a href="#" className="hover:text-turf transition">Leagues</a>
-              <a href="#" className="hover:text-turf transition">Custom Printing</a>
-              <a href="#" className="hover:text-turf transition">Gadgets</a>
+              <Link to="/shop/arrivals" className="hover:text-turf transition">New Arrivals</Link>
+              <Link to="/shop/leagues" className="hover:text-turf transition">Leagues</Link>
+              <Link to="/custom-printing" className="hover:text-turf transition">Custom Printing</Link>
+              <Link to="/shop/gadgets" className="hover:text-turf transition">Gadgets</Link>
             </div>
 
             {/* Icons */}
             <div className="flex items-center space-x-5">
               <Search className="w-5 h-5 cursor-pointer hover:text-turf" />
               
-              {/* Cart Icon - Now triggers sidebar */}
+              {/* Cart Icon */}
               <div 
                 className="relative cursor-pointer group" 
                 onClick={() => setIsCartOpen(true)}
               >
                 <ShoppingCart className="w-6 h-6 group-hover:text-turf transition-colors" />
                 {cart.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-turf text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
-                    {cart.length}
+                  <span className="absolute -top-2 -right-2 bg-turf text-pitch text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                    {cart.reduce((total, item) => total + item.quantity, 0)}
                   </span>
                 )}
               </div>
@@ -61,16 +65,16 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-pitch border-t border-white/10 px-4 pt-2 pb-6 space-y-4 uppercase text-sm tracking-widest">
-            <a href="#" className="block py-2 border-b border-white/5">New Arrivals</a>
-            <a href="#" className="block py-2 border-b border-white/5">Leagues</a>
-            <a href="#" className="block py-2 border-b border-white/5">Custom Printing</a>
-            <a href="#" className="block py-2 text-turf">Gadgets</a>
+          <div className="md:hidden bg-pitch border-t border-white/10 px-4 pt-2 pb-6 space-y-4 uppercase text-sm tracking-widest animate-in fade-in slide-in-from-top-5">
+            <Link to="/shop/arrivals" onClick={closeMenu} className="block py-3 border-b border-white/5">New Arrivals</Link>
+            <Link to="/shop/leagues" onClick={closeMenu} className="block py-3 border-b border-white/5">Leagues</Link>
+            <Link to="/custom-printing" onClick={closeMenu} className="block py-3 border-b border-white/5">Custom Printing</Link>
+            <Link to="/shop/gadgets" onClick={closeMenu} className="block py-3 text-turf">Gadgets</Link>
           </div>
         )}
       </nav>
 
-      {/* Cart Sidebar is always present, but visibility is controlled by state */}
+      {/* Cart Sidebar controls */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
